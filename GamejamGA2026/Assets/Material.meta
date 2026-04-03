@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:GamejamGA2026/Assets/Scripts.meta
+guid: 2f3e87503fe2bd74cb6b7c4a91911b1b
+========
 guid: 0eec3608dc9aad14fa1c522c34de1e3b
+>>>>>>>> main:GamejamGA2026/Assets/Material.meta
 folderAsset: yes
 DefaultImporter:
   externalObjects: {}
