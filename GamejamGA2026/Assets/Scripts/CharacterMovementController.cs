@@ -42,7 +42,7 @@ public class CharacterController : MonoBehaviour
     {
         timer += Time.deltaTime;
 
-        if (timer > .1f)
+        if (timer > .5f)
         {
             Movement();
         }
@@ -52,7 +52,7 @@ public class CharacterController : MonoBehaviour
             playerSprite.transform.rotation = cam.transform.rotation;
         }
 
-        transform.position = Vector3.Lerp(transform.position, targetPos, Mathf.Min((transform.position - targetPos).magnitude, Time.deltaTime * 10f));
+        transform.position = Vector3.Lerp(transform.position, targetPos, Mathf.Min((transform.position - targetPos).magnitude, Time.deltaTime * 5f));
     }
 
     private void Movement()
