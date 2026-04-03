@@ -34,11 +34,15 @@ public class TilemapTool : EditorWindow
     // ── Prefabs ─────────────────────────────────────────────
     List<GameObject> prefabs = new List<GameObject>();
 
+    // ── Rotation ─────────────────────────────────────────────
+    int currentRotation = 0; // 0, 90, 180, 270
+
     // ── Apparence ───────────────────────────────────────────
     Vector2     scrollPrefabs;
     Vector2     scrollLayers;
     GameObject  ghostInstance;          // preview fantôme
-    Vector3Int  lastCell = Vector3Int.one * int.MinValue;
+    Vector3Int  lastCell     = Vector3Int.one * int.MinValue;
+    int         lastRotation = -1;
 
     // ── Styles ──────────────────────────────────────────────
     GUIStyle styleHeader;
@@ -100,6 +104,10 @@ public class TilemapTool : EditorWindow
         EditorGUILayout.Space(8);
         DrawSeparator();
 
+        // ── Rotation ──
+        if (mode == ToolMode.Paint)
+            DrawRotationSection();
+
         // ── Layers ──
         DrawLayersSection();
 
@@ -114,9 +122,66 @@ public class TilemapTool : EditorWindow
         // ── Infos ──
         EditorGUILayout.HelpBox(
             "LMB → Poser/Effacer\n" +
-            "Shift+LMB → action continue (drag)\n" +
+            "LMB drag → action continue\n" +
+            "R → Rotation +90°\n" +
             "Esc → désactiver le tool",
             MessageType.Info);
+    }
+
+    // ────────────────────────────────────────────────────────
+    void DrawRotationSection()
+    {
+        GUILayout.Label("ROTATION", EditorStyles.boldLabel);
+        EditorGUILayout.BeginHorizontal();
+
+        Color bg = GUI.backgroundColor;
+        GUI.backgroundColor = new Color(0.3f, 0.3f, 0.3f);
+
+        if (GUILayout.Button("◄  -90°", GUILayout.Height(26)))
+            Rotate(-90);
+
+        // Affichage degré central
+        GUIStyle centerStyle = new GUIStyle(EditorStyles.boldLabel)
+        {
+            alignment = TextAnchor.MiddleCenter,
+            fontSize  = 13
+        };
+        GUILayout.Label($"{currentRotation}°", centerStyle, GUILayout.Width(50), GUILayout.Height(26));
+
+        if (GUILayout.Button("+90°  ►", GUILayout.Height(26)))
+            Rotate(90);
+
+        GUI.backgroundColor = bg;
+        EditorGUILayout.EndHorizontal();
+
+        // Boutons de preset
+        EditorGUILayout.BeginHorizontal();
+        foreach (int deg in new[] { 0, 90, 180, 270 })
+        {
+            bg = GUI.backgroundColor;
+            GUI.backgroundColor = currentRotation == deg
+                ? new Color(0.4f, 0.8f, 1f)
+                : new Color(0.25f, 0.25f, 0.25f);
+
+            if (GUILayout.Button($"{deg}°", GUILayout.Height(22)))
+            {
+                currentRotation = deg;
+                DestroyGhost();
+                SceneView.RepaintAll();
+            }
+            GUI.backgroundColor = bg;
+        }
+        EditorGUILayout.EndHorizontal();
+
+        EditorGUILayout.HelpBox("Raccourci SceneView : R", MessageType.None);
+    }
+
+    void Rotate(int delta)
+    {
+        currentRotation = ((currentRotation + delta) % 360 + 360) % 360;
+        DestroyGhost();
+        SceneView.RepaintAll();
+        Repaint();
     }
 
     // ────────────────────────────────────────────────────────
@@ -278,6 +343,14 @@ public class TilemapTool : EditorWindow
             return;
         }
 
+        // R = rotation +90°
+        if (e.type == EventType.KeyDown && e.keyCode == KeyCode.R)
+        {
+            Rotate(90);
+            e.Use();
+            return;
+        }
+
         // Bloquer la sélection Unity pendant que le tool est actif
         HandleUtility.AddDefaultControl(GUIUtility.GetControlID(FocusType.Passive));
 
@@ -339,8 +412,9 @@ public class TilemapTool : EditorWindow
         );
     }
 
+    // Le pivot du cube Unity est au centre géométrique → Y = yLevel + 0.5
     // X et Z sont centrés sur l'entier (0.0, 1.0, 2.0...) ce qui est correct
-    Vector3 CellToWorld(Vector3Int cell) => new Vector3(cell.x, cell.y, cell.z);
+    Vector3 CellToWorld(Vector3Int cell) => new Vector3(cell.x, cell.y + 0.5f, cell.z);
 
     // ────────────────────────────────────────────────────────
     void PlaceTile(Vector3Int cell)
@@ -359,6 +433,7 @@ public class TilemapTool : EditorWindow
 
         GameObject go = (GameObject)PrefabUtility.InstantiatePrefab(prefabs[selectedPrefab]);
         go.transform.position = pos;
+        go.transform.rotation = Quaternion.Euler(0f, currentRotation, 0f);
         go.name = $"{prefabs[selectedPrefab].name}_{cell.x}_{cell.y}_{cell.z}";
 
         // Parente sous un GameObject nommé par layer
@@ -407,10 +482,14 @@ public class TilemapTool : EditorWindow
             return;
         }
 
-        if (ghostInstance == null || lastCell != cell)
+        if (ghostInstance == null || lastCell != cell || lastRotation != currentRotation)
         {
             DestroyGhost();
-            ghostInstance = Instantiate(prefabs[selectedPrefab], CellToWorld(cell), Quaternion.identity);
+            ghostInstance = Instantiate(
+                prefabs[selectedPrefab],
+                CellToWorld(cell),
+                Quaternion.Euler(0f, currentRotation, 0f)
+            );
             ghostInstance.name = "__TileGhost__";
 
             // Rend le fantôme semi-transparent
@@ -431,7 +510,8 @@ public class TilemapTool : EditorWindow
             foreach (var c in ghostInstance.GetComponentsInChildren<Collider>())
                 c.enabled = false;
 
-            lastCell = cell;
+            lastCell     = cell;
+            lastRotation = currentRotation;
         }
     }
 
