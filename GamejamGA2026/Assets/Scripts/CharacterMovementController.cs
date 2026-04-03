@@ -2,7 +2,7 @@ using NUnit.Framework.Internal;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class CharacterController : MonoBehaviour
+public class CharacterMovementController : MonoBehaviour
 {
     [SerializeField]
     private Camera cam;
