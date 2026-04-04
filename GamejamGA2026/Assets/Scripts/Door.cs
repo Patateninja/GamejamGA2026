@@ -5,7 +5,7 @@ using System.Linq;
 public class Door : MonoBehaviour
 {
     [SerializeField]
-    List<bool> button;
+    List<GameButton> button;
 
     void Start()
     {
@@ -14,9 +14,13 @@ public class Door : MonoBehaviour
 
     void Update()
     {
-        if (button.Where(b => !b).ToArray().Length == 0)
+        if (button.Where(b => !b.active).ToArray().Length == 0)
         {
-            Destroy(gameObject);
+            gameObject.SetActive(false);
+        }
+        else
+        {
+            gameObject.SetActive(true);
         }
     }
 }
