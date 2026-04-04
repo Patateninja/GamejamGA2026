@@ -6,6 +6,12 @@ public class VictoryPanel : MonoBehaviour
     [SerializeField] private GameObject victoryPanel;
     [SerializeField] private LevelProgressManager levelProgressManager;
 
+    private void Awake()
+    {
+        //ensure that the game is not paused when the game starts, in case the player had paused the game in a previous session and then quit without unpausing
+        Time.timeScale = 1f;
+    }
+
     // Affiche le panneau de victory et met le temps à l'arrêt
     public void OpenVictoryPanel()
     {

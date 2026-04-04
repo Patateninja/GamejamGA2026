@@ -9,6 +9,7 @@ public class LevelManager : MonoBehaviour
     private List<ExitTile> exits;
 
     bool levelComplete = false;
+    float delayBeforeVictoryPanel = 1f;
 
     [SerializeField] private VictoryPanel VPanel;
 
@@ -25,6 +26,9 @@ public class LevelManager : MonoBehaviour
         if (exits.Where(e => e.PlayerInside == false).ToArray().Length == 0)
         {
             if (levelComplete) return;
+            delayBeforeVictoryPanel -= Time.deltaTime;
+
+            if (delayBeforeVictoryPanel > 0f) return;
             Debug.Log("Level Complete");
             if (VPanel == null)
             {
@@ -33,6 +37,11 @@ public class LevelManager : MonoBehaviour
             }
             VPanel.OpenVictoryPanel();
             levelComplete = true;
+        }
+        else
+        {
+            levelComplete = false;
+            delayBeforeVictoryPanel = .5f;
         }
     }
 }
