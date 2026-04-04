@@ -1,6 +1,8 @@
 using NUnit.Framework.Internal;
+using UnityEditor.PackageManager.Requests;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Windows;
 
 public class CharacterMovementController : MonoBehaviour
 {
@@ -31,11 +33,19 @@ public class CharacterMovementController : MonoBehaviour
         {
             Debug.LogError($"NO INPUT ASSET IN CHARACTER {name}");
         }
+
+
     }
 
     void Start()
     {
         targetPos = transform.position;
+
+        gameObject.GetComponent<Animator>().SetFloat("Magnitude", 0f);
+        gameObject.GetComponent<Animator>().SetFloat("X", 0f);
+        gameObject.GetComponent<Animator>().SetFloat("Y", 0f);
+        gameObject.GetComponent<Animator>().SetFloat("MemX", -1f);
+        gameObject.GetComponent<Animator>().SetFloat("MemY", 0f);
     }
 
     void Update()
@@ -59,6 +69,18 @@ public class CharacterMovementController : MonoBehaviour
     {
         Vector2 input = moveAction.ReadValue<Vector2>();
         Vector3 mvt = new Vector3(input.y == 0 ? input.x : 0f, 0f, input.y);
+
+        gameObject.GetComponent<Animator>().SetFloat("Magnitude", mvt.magnitude);
+
+        gameObject.GetComponent<Animator>().SetFloat("X", mvt.x > 0f ? 1f : 0f);
+        gameObject.GetComponent<Animator>().SetFloat("Y", mvt.y > 0f ? 1f : 0f);
+
+        if (mvt.magnitude > 0f)
+        {
+            gameObject.GetComponent<Animator>().SetFloat("MemX", mvt.x > 0f ? 1f : 0f);
+            gameObject.GetComponent<Animator>().SetFloat("MemY", mvt.y > 0f ? 1f : 0f);
+        }
+
 
         RaycastHit hit;
         if (!Physics.Raycast(targetPos + new Vector3(0,.5f,0f), mvt, out hit, tileSize))
