@@ -1,8 +1,6 @@
-using NUnit.Framework.Internal;
-using UnityEditor.PackageManager.Requests;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.Windows;
+using System.Collections;
 
 public class CharacterMovementController : MonoBehaviour
 {
@@ -23,6 +21,8 @@ public class CharacterMovementController : MonoBehaviour
     [SerializeField]
     private GameObject playerSprite;
 
+    private bool falling = false;
+
     void Awake()
     {
         if (inputAsset)
@@ -33,8 +33,6 @@ public class CharacterMovementController : MonoBehaviour
         {
             Debug.LogError($"NO INPUT ASSET IN CHARACTER {name}");
         }
-
-
     }
 
     void Start()
@@ -50,12 +48,17 @@ public class CharacterMovementController : MonoBehaviour
 
     void Update()
     {
-        timer += Time.deltaTime;
 
-        if (timer > .5f)
+        if (!falling)
         {
-            Movement();
+            timer += Time.deltaTime;
+
+            if (timer > .5f)
+            {
+                Movement();
+            }
         }
+        
 
         if (playerSprite)
         {
@@ -102,10 +105,22 @@ public class CharacterMovementController : MonoBehaviour
             }
         }
 
+        if (!Physics.Raycast(targetPos + new Vector3(0f,.5f,0f), Vector3.down, 1f) && !falling)
+        {
+            falling = true;
+            StartCoroutine(Fall());
+        }
 
         if (input.magnitude != 0f)
         {
             timer = 0f;
         }
+    }
+
+    private IEnumerator Fall()
+    {
+        yield return new WaitForSeconds(1f);
+
+        targetPos += new Vector3(0f, -2f, 0f);
     }
 }
