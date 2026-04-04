@@ -2,12 +2,14 @@ using UnityEngine;
 
 public class TriggerButton : GameButton
 {
-    public override void PlayerEnter()
+    public override void Entered()
     {
-        active = true;  
+        active = true;
+        OffModel.SetActive(false);
+        OnModel.SetActive(true);
     }
 
-    public override void PlayerExit()
+    public override void Exited()
     {
         //Nothing
     }

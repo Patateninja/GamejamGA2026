@@ -4,29 +4,36 @@ using UnityEngine;
 [RequireComponent (typeof(BoxCollider))]
 public abstract class GameButton : MonoBehaviour
 {
+    [HideInInspector]
     public bool active = false;
+
+    [SerializeField]
+    protected GameObject OffModel;
+    [SerializeField]
+    protected GameObject OnModel;
 
     void Start()
     {
-        
+        OffModel.SetActive(true);
+        OnModel.SetActive(false);
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.TryGetComponent(out CharacterMovementController character))
+        if (other.TryGetComponent(out CharacterMovementController character) || other.gameObject.CompareTag("LightCrate") || other.gameObject.CompareTag("Crate"))
         {
-            PlayerEnter();
+            Entered();
         }
     }
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.TryGetComponent(out CharacterMovementController character))
+        if (other.TryGetComponent(out CharacterMovementController character) || other.gameObject.CompareTag("LightCrate") || other.gameObject.CompareTag("Crate"))
         {
-            PlayerExit();
+            Exited();
         }
     }
-
-    public abstract void PlayerEnter();
-    public abstract void PlayerExit();
+        
+    public abstract void Entered();
+    public abstract void Exited();
 }
