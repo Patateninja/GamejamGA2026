@@ -67,11 +67,12 @@ public class CharacterMovementController : MonoBehaviour
         }
         else
         {
-            //verifier que le raycast hit une create et si c'est le cas, faire le mouvement sur la create et pas sur le personnage
             if (hit.collider.gameObject.CompareTag("LightCrate"))
             {
-                hit.collider.gameObject.GetComponent<CrateMovement>().MoveThisDirection(input);
-                targetPos += Quaternion.Euler(0, cam.transform.rotation.y, 0) * mvt;
+                if (hit.collider.gameObject.GetComponent<CrateMovement>().MoveThisDirection(input))
+                {
+                    targetPos += Quaternion.Euler(0, cam.transform.rotation.y, 0) * mvt;
+                }
             }
             else if (hit.collider.gameObject.CompareTag("Crate"))
             {
