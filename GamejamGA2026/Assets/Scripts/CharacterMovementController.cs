@@ -52,7 +52,7 @@ public class CharacterMovementController : MonoBehaviour
             playerSprite.transform.rotation = cam.transform.rotation;
         }
 
-        transform.position = Vector3.Lerp(transform.position, targetPos, Mathf.Min((transform.position - targetPos).magnitude, Time.deltaTime * 5f));
+        transform.position = Vector3.Lerp(transform.position, targetPos, Mathf.Min((transform.position - targetPos).magnitude, Time.deltaTime * 6f));
     }
 
     private void Movement()
@@ -61,7 +61,7 @@ public class CharacterMovementController : MonoBehaviour
         Vector3 mvt = new Vector3(input.y == 0 ? input.x : 0f, 0f, input.y);
 
         RaycastHit hit;
-        if (!Physics.Raycast(targetPos + new Vector3(0,.5f,0f), mvt, out hit, tileSize))
+        if (!Physics.Raycast(targetPos + new Vector3(0,.5f,0f), mvt, out hit, tileSize+0.4f))
         {
             targetPos += Quaternion.Euler(0, cam.transform.rotation.y, 0) * mvt;
         }
