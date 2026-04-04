@@ -57,7 +57,7 @@ public class Slot : MonoBehaviour
     }
 
     // Met à jour l'apparence en fonction des états
-    private void ApplyVisualState()
+    public void ApplyVisualState()
     {
         if (_button != null)
             _button.interactable = isUnlocked;
@@ -116,11 +116,20 @@ public class Slot : MonoBehaviour
     // Réinitialise la progression pour ce niveau
     public void ResetProgress()
     {
-        PlayerPrefs.DeleteKey(UnlockedKey);
+        // si la clé est string firsthey = $"Level_unlocked_Level01"; alors on doit la laisser accessible pour débloquer le niveau 1 et pouvoir jouer au jeu, mais on doit réinitialiser les autres niveaux
+        string nextKey = $"Level_unlocked_Level01";
+        if (UnlockedKey != nextKey)
+        {
+            PlayerPrefs.DeleteKey(UnlockedKey);
+        }
+        else
+        {
+            PlayerPrefs.SetInt(UnlockedKey, 1);
+        }
         PlayerPrefs.DeleteKey(CompletedKey);
         PlayerPrefs.Save();
 
-        isUnlocked = false;
+        isUnlocked = PlayerPrefs.HasKey(UnlockedKey);
         isCompleted = false;
         ApplyVisualState();
     }
