@@ -60,9 +60,13 @@ public class CharacterMovementController : MonoBehaviour
         Vector2 input = moveAction.ReadValue<Vector2>();
         Vector3 mvt = new Vector3(input.y == 0 ? input.x : 0f, 0f, input.y);
 
-        if (!Physics.Raycast(targetPos, mvt, tileSize))
+        if (!Physics.Raycast(targetPos + new Vector3(0,.5f,0), mvt, out RaycastHit hit, tileSize))
         {
             targetPos += Quaternion.Euler(0,cam.transform.rotation.y, 0) * mvt;
+        }
+        else
+        {
+            Debug.Log($"{name} hit {hit.collider.gameObject.name}");
         }
 
         if (input.magnitude != 0f)
