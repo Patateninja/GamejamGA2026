@@ -1,15 +1,32 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 [RequireComponent (typeof(BoxCollider))]
-public class GameButton : MonoBehaviour
+public abstract class GameButton : MonoBehaviour
 {
+    public bool active = false;
+
     void Start()
     {
         
     }
 
-    void Update()
+    private void OnTriggerEnter(Collider other)
     {
-        
+        if (other.TryGetComponent(out CharacterMovementController character))
+        {
+            PlayerEnter();
+        }
     }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.TryGetComponent(out CharacterMovementController character))
+        {
+            PlayerExit();
+        }
+    }
+
+    public abstract void PlayerEnter();
+    public abstract void PlayerExit();
 }
