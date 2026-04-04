@@ -6,7 +6,7 @@ public class CharacterMovementController : MonoBehaviour
 {
     [SerializeField]
     private Camera cam;
-        
+
     [SerializeField]
     private float tileSize;
 
@@ -60,14 +60,25 @@ public class CharacterMovementController : MonoBehaviour
         Vector2 input = moveAction.ReadValue<Vector2>();
         Vector3 mvt = new Vector3(input.y == 0 ? input.x : 0f, 0f, input.y);
 
-        if (!Physics.Raycast(targetPos + new Vector3(0,.5f,0), mvt, out RaycastHit hit, tileSize))
+        RaycastHit hit;
+        if (!Physics.Raycast(targetPos + new Vector3(0,.5f,0f), mvt, out hit, tileSize))
         {
-            targetPos += Quaternion.Euler(0,cam.transform.rotation.y, 0) * mvt;
+            targetPos += Quaternion.Euler(0, cam.transform.rotation.y, 0) * mvt;
         }
         else
         {
-            Debug.Log($"{name} hit {hit.collider.gameObject.name}");
+            //verifier que le raycast hit une create et si c'est le cas, faire le mouvement sur la create et pas sur le personnage
+            if (hit.collider.gameObject.CompareTag("Crate"))
+            {
+                hit.collider.gameObject.GetComponent<CrateMovement>().MoveThisDirection(input);
+                targetPos += Quaternion.Euler(0, cam.transform.rotation.y, 0) * mvt;
+            }
+            else if (hit.collider.gameObject.CompareTag("LightCrate"))
+            {
+                hit.collider.gameObject.GetComponent<CrateMovement>().MoveThisDirection(input);
+            }
         }
+
 
         if (input.magnitude != 0f)
         {
