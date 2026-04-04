@@ -6,6 +6,12 @@ public class VictoryPanel : MonoBehaviour
     [SerializeField] private GameObject victoryPanel;
     [SerializeField] private LevelProgressManager levelProgressManager;
 
+    private void Awake()
+    {
+        //ensure that the game is not paused when the game starts, in case the player had paused the game in a previous session and then quit without unpausing
+        Time.timeScale = 1f;
+    }
+
     // Affiche le panneau de victory et met le temps à l'arrêt
     public void OpenVictoryPanel()
     {
@@ -31,7 +37,7 @@ public class VictoryPanel : MonoBehaviour
     public void QuitGameToMenu()
     {
         Time.timeScale = 1f; // Reprend le temps
-        UnityEngine.SceneManagement.SceneManager.LoadScene("Menu");
+        UnityEngine.SceneManagement.SceneManager.LoadScene("Menu 1");
     }
 
     public void NextLevel()
@@ -50,13 +56,13 @@ public class VictoryPanel : MonoBehaviour
             {
                 Debug.LogWarning($"Niveau suivant '{nextLevelId}' non débloqué. Vérifiez les PlayerPrefs.");
                 // retourne au menu principal si le niveau suivant n'est pas débloqué (optionnel)
-                UnityEngine.SceneManagement.SceneManager.LoadScene("Menu");
+                UnityEngine.SceneManagement.SceneManager.LoadScene("Menu 1");
             }
         }
         else
         {
             Debug.LogWarning("Aucun ID de niveau suivant spécifié dans LevelProgressManager.");
-            UnityEngine.SceneManagement.SceneManager.LoadScene("Menu");
+            UnityEngine.SceneManagement.SceneManager.LoadScene("Menu 1");
         }
     }
 

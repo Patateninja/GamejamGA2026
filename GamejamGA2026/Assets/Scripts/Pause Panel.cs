@@ -3,6 +3,7 @@ using UnityEngine.InputSystem;
 
 public class PausePanel : MonoBehaviour
 {
+    [SerializeField] private GameObject victoryPanel;
     [SerializeField] private GameObject pausePanel;
     [SerializeField] private InputActionAsset inputAsset;
 
@@ -57,6 +58,12 @@ public class PausePanel : MonoBehaviour
 
     private void TogglePause(InputAction.CallbackContext context)
     {
+        //si le panneau de victory est actif, ne pas permettre d'ouvrir le panneau de pause
+        if ((victoryPanel ?? gameObject).activeSelf)
+        {
+            return;
+        }
+
         var panel = pausePanel ?? gameObject;
         if (panel.activeSelf)
         {
@@ -76,7 +83,7 @@ public class PausePanel : MonoBehaviour
     public void QuitGameToMenu()
     {
         Time.timeScale = 1f; // Reprend le temps
-        UnityEngine.SceneManagement.SceneManager.LoadScene("Menu");
+        UnityEngine.SceneManagement.SceneManager.LoadScene("Menu 1");
     }
 
     void Update()

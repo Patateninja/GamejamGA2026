@@ -17,8 +17,13 @@ public class LevelsPanel : MonoBehaviour
     public void ResetProgress()
     {
         PlayerPrefs.DeleteAll();
-        string nextKey = $"Level_unlocked_Level01";
-        PlayerPrefs.SetInt(nextKey, 1);
-        PlayerPrefs.Save();
+        //applique les changements visuels à tous les slots de niveaux (optionnel, dépend de votre implémentation)
+        Slot[] allSlots = FindObjectsByType<Slot>(FindObjectsSortMode.None);
+        foreach (Slot slot in allSlots)
+        {
+            slot.ResetProgress();
+        }
+
     }
 }
+
