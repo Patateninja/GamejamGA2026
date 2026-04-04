@@ -2343,6 +2343,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b3e86e1f5bc54224e99460686f8ea229, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PausePanel
+  victoryPanel: {fileID: 1172669155}
   pausePanel: {fileID: 644329876}
   inputAsset: {fileID: -944628639613478452, guid: acf88138c63764543a47db9dd1f24ee8, type: 3}
 --- !u!114 &617074689

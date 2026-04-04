@@ -3176,6 +3176,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b3e86e1f5bc54224e99460686f8ea229, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PausePanel
+  victoryPanel: {fileID: 1305162612}
   pausePanel: {fileID: 1201047765}
   inputAsset: {fileID: -944628639613478452, guid: acf88138c63764543a47db9dd1f24ee8, type: 3}
 --- !u!114 &787127929
@@ -7721,7 +7722,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 061e5a7ff48b46146bd9a2d851599ec6, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -10
+      value: -11
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 061e5a7ff48b46146bd9a2d851599ec6, type: 3}
       propertyPath: m_LocalPosition.y
