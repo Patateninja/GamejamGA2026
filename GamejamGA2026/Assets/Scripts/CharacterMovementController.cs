@@ -26,8 +26,12 @@ public class CharacterMovementController : MonoBehaviour
     [SerializeField]
     private Canvas Canvas;
 
+    [SerializeField]
+    private GameObject Splash;
+
     void Awake()
     {
+        Splash.SetActive(false);
         if (inputAsset)
         {
             moveAction = inputAsset.FindAction("Player/Move");
@@ -172,12 +176,19 @@ public class CharacterMovementController : MonoBehaviour
         yield return new WaitForSeconds(0.5f);
 
         targetPos += new Vector3(0f, -5f, 0f);
+        Splash.transform.position = targetPos;
+        Splash.transform.position = new Vector3(Splash.transform.position.x, -1.5f, Splash.transform.position.z);
+        Splash.SetActive(true);
 
         yield return new WaitForSeconds(0.5f);
 
         Canvas.GetComponent<ShadeManager>().FadeIn(1f);
 
-        yield return new WaitForSeconds(1.1f);
+        yield return new WaitForSeconds(0.4f);
+
+        Splash.SetActive(false);
+
+        yield return new WaitForSeconds(0.7f);
 
         Canvas.GetComponent<PausePanel>().RestartLevel();
     }
