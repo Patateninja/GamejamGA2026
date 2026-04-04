@@ -9,9 +9,21 @@ public class PausePanel : MonoBehaviour
 
     private InputAction pauseAction;
 
+    bool blockPausePanel = false;
+
+    public void BlockPausePanel()
+    {
+        ClosePausePanel();
+        blockPausePanel = true;
+    }
+
     // Affiche le panneau de pause et met le temps à l'arrêt
     public void OpenPausePanel()
     {
+        if (blockPausePanel)
+        {
+            return;
+        }
         Time.timeScale = 0f; // Met le temps à l'arrêt
         (pausePanel ?? gameObject).SetActive(true); // Affiche le panneau de pause (fallback)
     }
@@ -58,6 +70,10 @@ public class PausePanel : MonoBehaviour
 
     private void TogglePause(InputAction.CallbackContext context)
     {
+        if (blockPausePanel)
+        {
+            return;
+        }
         //si le panneau de victory est actif, ne pas permettre d'ouvrir le panneau de pause
         if ((victoryPanel ?? gameObject).activeSelf)
         {
