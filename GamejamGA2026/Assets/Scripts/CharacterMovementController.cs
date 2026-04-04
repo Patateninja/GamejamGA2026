@@ -1,3 +1,4 @@
+using NUnit.Framework.Internal;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -5,7 +6,7 @@ public class CharacterMovementController : MonoBehaviour
 {
     [SerializeField]
     private Camera cam;
-
+        
     [SerializeField]
     private float tileSize;
 
@@ -61,7 +62,7 @@ public class CharacterMovementController : MonoBehaviour
 
         if (!Physics.Raycast(targetPos, mvt, tileSize))
         {
-            targetPos += Quaternion.Euler(0, cam.transform.rotation.y, 0) * mvt;
+            targetPos += Quaternion.Euler(0,cam.transform.rotation.y, 0) * mvt;
         }
 
         if (input.magnitude != 0f)

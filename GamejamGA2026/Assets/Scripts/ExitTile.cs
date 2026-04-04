@@ -4,7 +4,7 @@ using UnityEngine;
 public class ExitTile : MonoBehaviour
 {
     public bool PlayerInside;
-
+    
     void Start()
     {
         GetComponent<BoxCollider>().isTrigger = true;
