@@ -22,6 +22,7 @@ public class CharacterMovementController : MonoBehaviour
     private GameObject playerSprite;
 
     private bool falling = false;
+    private bool isMoving;
 
     void Awake()
     {
@@ -39,11 +40,11 @@ public class CharacterMovementController : MonoBehaviour
     {
         targetPos = transform.position;
 
-        gameObject.GetComponent<Animator>().SetFloat("Magnitude", 0f);
-        gameObject.GetComponent<Animator>().SetFloat("X", 0f);
-        gameObject.GetComponent<Animator>().SetFloat("Y", 0f);
-        gameObject.GetComponent<Animator>().SetFloat("MemX", -1f);
-        gameObject.GetComponent<Animator>().SetFloat("MemY", 0f);
+        playerSprite.GetComponent<Animator>().SetFloat("Magnitude", 0f);
+        playerSprite.GetComponent<Animator>().SetFloat("X", 0f);
+        playerSprite.GetComponent<Animator>().SetFloat("Y", 0f);
+        playerSprite.GetComponent<Animator>().SetFloat("MemX", -1f);
+        playerSprite.GetComponent<Animator>().SetFloat("MemY", 0f);
     }
 
     void Update()
@@ -60,12 +61,14 @@ public class CharacterMovementController : MonoBehaviour
         }
         
 
-        if (playerSprite)
+        // Lerp pour un mouvement plus fluide
+        transform.position = Vector3.Lerp(transform.position, targetPos, Mathf.Min((transform.position - targetPos).magnitude, Time.deltaTime * 6f));
+        //quand le lerp est presque terminé, snap à la position cible pour éviter les petits écarts
+        if ((transform.position - targetPos).magnitude < 0.1f)
         {
-            playerSprite.transform.rotation = cam.transform.rotation;
+            transform.position = targetPos;
         }
 
-        transform.position = Vector3.Lerp(transform.position, targetPos, Mathf.Min((transform.position - targetPos).magnitude, Time.deltaTime * 6f));
     }
 
     private void Movement()
@@ -73,20 +76,39 @@ public class CharacterMovementController : MonoBehaviour
         Vector2 input = moveAction.ReadValue<Vector2>();
         Vector3 mvt = new Vector3(input.y == 0 ? input.x : 0f, 0f, input.y);
 
-        gameObject.GetComponent<Animator>().SetFloat("Magnitude", mvt.magnitude);
-
-        gameObject.GetComponent<Animator>().SetFloat("X", mvt.x > 0f ? 1f : 0f);
-        gameObject.GetComponent<Animator>().SetFloat("Y", mvt.y > 0f ? 1f : 0f);
-
-        if (mvt.magnitude > 0f)
+        if (mvt.sqrMagnitude > 1f)
         {
-            gameObject.GetComponent<Animator>().SetFloat("MemX", mvt.x > 0f ? 1f : 0f);
-            gameObject.GetComponent<Animator>().SetFloat("MemY", mvt.y > 0f ? 1f : 0f);
+            mvt.Normalize();
+        }
+
+        if (mvt.magnitude > 0.1f)
+        {
+            playerSprite.GetComponent<Animator>().SetFloat("Magnitude", mvt.magnitude);
+        }
+        else
+        {
+            playerSprite.GetComponent<Animator>().SetFloat("Magnitude", 0f);
+        }
+
+        if (mvt.magnitude == 0f)
+        {
+            // Si le personnage ne bouge pas, on garde la dernière direction pour l'animation
+            playerSprite.GetComponent<Animator>().SetFloat("X", playerSprite.GetComponent<Animator>().GetFloat("MemX"));
+            playerSprite.GetComponent<Animator>().SetFloat("Y", playerSprite.GetComponent<Animator>().GetFloat("MemY"));
+        }
+        else
+        {
+            // Si le personnage bouge, on met à jour la direction et la mémorise pour l'animation
+            playerSprite.GetComponent<Animator>().SetFloat("X", mvt.x > 0f ? 1f : mvt.x < 0f ? -1f : 0f);
+            playerSprite.GetComponent<Animator>().SetFloat("Y", mvt.z > 0f ? 1f : mvt.z < 0f ? -1f : 0f);
+            // Mémorisation de la direction pour l'animation
+            playerSprite.GetComponent<Animator>().SetFloat("MemX", mvt.x > 0f ? 1f : mvt.x < 0f ? -1f : 0f);
+            playerSprite.GetComponent<Animator>().SetFloat("MemY", mvt.z > 0f ? 1f : mvt.z < 0f ? -1f : 0f);
         }
 
 
         RaycastHit hit;
-        if (!Physics.Raycast(targetPos + new Vector3(0,.5f,0f), mvt, out hit, tileSize+0.4f))
+        if (!Physics.Raycast(targetPos + new Vector3(0, .5f, 0f), mvt, out hit, tileSize + 0.4f))
         {
             targetPos += Quaternion.Euler(0, cam.transform.rotation.y, 0) * mvt;
         }
