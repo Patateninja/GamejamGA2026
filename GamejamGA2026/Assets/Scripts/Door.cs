@@ -5,7 +5,12 @@ using System.Linq;
 public class Door : MonoBehaviour
 {
     [SerializeField]
-    List<GameButton> button;
+    private List<GameButton> button;
+
+    [SerializeField]
+    private GameObject door;
+
+    private bool open = false;
 
     void Start()
     {
@@ -16,11 +21,14 @@ public class Door : MonoBehaviour
     {
         if (button.Where(b => !b.active).ToArray().Length == 0)
         {
-            gameObject.SetActive(false);
+            open = true;
         }
         else
         {
-            gameObject.SetActive(true);
+            open = false;
         }
+
+        door.transform.position = Vector3.Lerp(door.transform.position, new Vector3(door.transform.position.x, open ? -.75f : .5f, door.transform.position.z), Time.deltaTime * 3f);
+
     }
 }
