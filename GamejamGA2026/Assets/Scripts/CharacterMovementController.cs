@@ -22,7 +22,9 @@ public class CharacterMovementController : MonoBehaviour
     private GameObject playerSprite;
 
     private bool falling = false;
-    private bool isMoving;
+
+    [SerializeField]
+    private Canvas Canvas;
 
     void Awake()
     {
@@ -34,6 +36,7 @@ public class CharacterMovementController : MonoBehaviour
         {
             Debug.LogError($"NO INPUT ASSET IN CHARACTER {name}");
         }
+        Canvas.GetComponent<ShadeManager>().FadeOut(1f);
     }
 
     void Start()
@@ -45,6 +48,7 @@ public class CharacterMovementController : MonoBehaviour
         playerSprite.GetComponent<Animator>().SetFloat("Y", 0f);
         playerSprite.GetComponent<Animator>().SetFloat("MemX", -1f);
         playerSprite.GetComponent<Animator>().SetFloat("MemY", 0f);
+        playerSprite.GetComponent<Animator>().SetBool("falling", falling);
     }
 
     void Update()
@@ -59,7 +63,22 @@ public class CharacterMovementController : MonoBehaviour
                 Movement();
             }
         }
-        
+        else
+        {
+            Vector3 mvt = new Vector3(playerSprite.GetComponent<Animator>().GetFloat("MemX"), 0f, playerSprite.GetComponent<Animator>().GetFloat("MemY"));
+            if (mvt.sqrMagnitude > 1f)
+            {
+                mvt.Normalize();
+            }
+            if (mvt.magnitude > 0.1f)
+            {
+                playerSprite.GetComponent<Animator>().SetFloat("Magnitude", mvt.magnitude);
+            }
+            else
+            {
+                playerSprite.GetComponent<Animator>().SetFloat("Magnitude", 0f);
+            }
+        }
 
         // Lerp pour un mouvement plus fluide
         transform.position = Vector3.Lerp(transform.position, targetPos, Mathf.Min((transform.position - targetPos).magnitude, Time.deltaTime * 6f));
@@ -127,7 +146,7 @@ public class CharacterMovementController : MonoBehaviour
             }
         }
 
-        if (!Physics.Raycast(targetPos + new Vector3(0f,.5f,0f), Vector3.down, 1f) && !falling)
+        if (!Physics.Raycast(targetPos + new Vector3(0f, .5f, 0f), Vector3.down, 1f) && !falling)
         {
             falling = true;
             StartCoroutine(Fall());
@@ -141,8 +160,25 @@ public class CharacterMovementController : MonoBehaviour
 
     private IEnumerator Fall()
     {
-        yield return new WaitForSeconds(1f);
+        Canvas.GetComponent<VictoryPanel>().BlockVictoryPanel();
+        Canvas.GetComponent<PausePanel>().BlockPausePanel();
 
-        targetPos += new Vector3(0f, -2f, 0f);
+        yield return new WaitForSeconds(0.6f);
+
+        playerSprite.GetComponent<Animator>().SetBool("falling", falling);
+
+        targetPos += new Vector3(0f, 1f, 0f);
+
+        yield return new WaitForSeconds(0.5f);
+
+        targetPos += new Vector3(0f, -5f, 0f);
+
+        yield return new WaitForSeconds(0.5f);
+
+        Canvas.GetComponent<ShadeManager>().FadeIn(1f);
+
+        yield return new WaitForSeconds(1.1f);
+
+        Canvas.GetComponent<PausePanel>().RestartLevel();
     }
 }

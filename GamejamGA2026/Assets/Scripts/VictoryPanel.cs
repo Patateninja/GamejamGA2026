@@ -6,6 +6,14 @@ public class VictoryPanel : MonoBehaviour
     [SerializeField] private GameObject victoryPanel;
     [SerializeField] private LevelProgressManager levelProgressManager;
 
+    bool isblocked = false;
+
+    public void BlockVictoryPanel()
+    {
+        CloseVictoryPanel();
+        isblocked = true;
+    }
+
     private void Awake()
     {
         //ensure that the game is not paused when the game starts, in case the player had paused the game in a previous session and then quit without unpausing
@@ -15,6 +23,10 @@ public class VictoryPanel : MonoBehaviour
     // Affiche le panneau de victory et met le temps à l'arrêt
     public void OpenVictoryPanel()
     {
+        if (isblocked)
+        {
+            return;
+        }
         Time.timeScale = 0f; // Met le temps à l'arrêt
         (victoryPanel ?? gameObject).SetActive(true); // Affiche le panneau de victory (fallback)
         //appelle la fonction de level completed du level progress manager pour marquer le niveau comme terminé
