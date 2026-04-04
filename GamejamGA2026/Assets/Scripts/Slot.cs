@@ -19,6 +19,15 @@ public class Slot : MonoBehaviour
     private Button _button;
     private Image _image;
 
+    [SerializeField]
+    private Sprite _spriteLocked;
+
+    [SerializeField]
+    private Sprite _spriteUnlocked;
+
+    [SerializeField]
+    private Sprite _spriteFinish;
+
     private string Id => string.IsNullOrEmpty(levelId) ? gameObject.name : levelId;
     private string UnlockedKey => $"Level_unlocked_{levelId}";
     private string CompletedKey => $"Level_completed_{levelId}";
@@ -66,17 +75,16 @@ public class Slot : MonoBehaviour
         {
             if (!isUnlocked)
             {
-                _image.color = Color.gray;
+                _image.sprite = _spriteLocked;
             }
             else if (isCompleted)
             {
-                // Niveau débloqué et terminé -> teinte verte claire
-                _image.color = new Color(0.8f, 1f, 0.8f);
+                _image.sprite = _spriteFinish;
+
             }
             else
             {
-                // Débloqué mais non terminé -> couleur normale
-                _image.color = Color.white;
+                _image.sprite = _spriteUnlocked;
             }
         }
     }
