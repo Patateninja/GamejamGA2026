@@ -4,6 +4,7 @@ public class LevelsPanel : MonoBehaviour
 {
     [SerializeField] private GameObject levelsPanel;
     [SerializeField] private GameObject menuPanel;
+    [SerializeField] private GameObject creditPanel;
 
     [SerializeField]
     private AudioSource audioSrc;
@@ -13,6 +14,7 @@ public class LevelsPanel : MonoBehaviour
     {
         levelsPanel.SetActive(false);
         menuPanel.SetActive(true);
+        creditPanel.SetActive(true);
         audioSrc.PlayOneShot(audioSrc.clip);
     }
 

@@ -3858,6 +3858,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 4556389242014963704}
     m_Modifications:
+    - target: {fileID: 1543610978566418205, guid: 0bfab68fb5f5cff42a7d81ab379a64c8, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -2.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1543610978566418205, guid: 0bfab68fb5f5cff42a7d81ab379a64c8, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 1543610978566418205, guid: 0bfab68fb5f5cff42a7d81ab379a64c8, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -9
+      objectReference: {fileID: 0}
     - target: {fileID: 4438210254732618786, guid: 0bfab68fb5f5cff42a7d81ab379a64c8, type: 3}
       propertyPath: m_NormalizedViewPortRect.x
       value: 0.5
@@ -4389,6 +4401,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 4556389242014963704}
     m_Modifications:
+    - target: {fileID: 1543610978566418205, guid: 0bfab68fb5f5cff42a7d81ab379a64c8, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -2.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1543610978566418205, guid: 0bfab68fb5f5cff42a7d81ab379a64c8, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 1543610978566418205, guid: 0bfab68fb5f5cff42a7d81ab379a64c8, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -9
+      objectReference: {fileID: 0}
     - target: {fileID: 4510452036544177496, guid: 0bfab68fb5f5cff42a7d81ab379a64c8, type: 3}
       propertyPath: Canvas
       value: 
