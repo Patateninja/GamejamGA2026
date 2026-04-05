@@ -6,8 +6,7 @@ public class VictoryPanel : MonoBehaviour
     [SerializeField] private GameObject victoryPanel;
     [SerializeField] private LevelProgressManager levelProgressManager;
 
-    bool isblocked = false;
-
+    public bool isblocked = false;
     public void BlockVictoryPanel()
     {
         CloseVictoryPanel();
