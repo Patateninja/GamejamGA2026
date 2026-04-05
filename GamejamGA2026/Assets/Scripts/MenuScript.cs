@@ -4,6 +4,7 @@ public class MenuScript : MonoBehaviour
 {
     [SerializeField] private GameObject LevelsPanel;
     [SerializeField] private GameObject MenuPanel;
+    [SerializeField] private GameObject creditPanel;
 
     [SerializeField]
     private AudioSource audioSrc;
@@ -13,6 +14,7 @@ public class MenuScript : MonoBehaviour
     {
         MenuPanel.SetActive(false);
         LevelsPanel.SetActive(true);
+        creditPanel.SetActive(false);
         audioSrc.PlayOneShot(audioSrc.clip);
 
     }

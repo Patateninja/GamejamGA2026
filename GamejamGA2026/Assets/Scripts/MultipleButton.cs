@@ -17,6 +17,11 @@ public class MultipleButton : GameButton
 
     public override void Entered()
     {
+        if (!active)
+        {
+            pressAudioSrc.PlayOneShot(pressAudioSrc.clip);
+        }
+
         active = true;
 
         OffModel.SetActive(false);
@@ -31,9 +36,9 @@ public class MultipleButton : GameButton
 
             foreach (MultipleButton button in otherButtons)
             {
-                OffModel.SetActive(false);
-                WaitModel.SetActive(false);
-                OnModel.SetActive(true);
+                button.OffModel.SetActive(false);
+                button.WaitModel.SetActive(false);
+                button.OnModel.SetActive(true);
             }
         }
     }
@@ -43,6 +48,8 @@ public class MultipleButton : GameButton
         if (otherButtons.Where(b => !b.active).Count() != 0)
         {
             active = false;
+
+            unpressAudioSrc.PlayOneShot(unpressAudioSrc.clip);
 
             OffModel.SetActive(true);
             WaitModel.SetActive(false);

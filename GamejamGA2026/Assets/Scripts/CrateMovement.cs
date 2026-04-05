@@ -11,7 +11,9 @@ public class CrateMovement : MonoBehaviour
     [SerializeField]
     private GameObject Splash;
     [SerializeField]
-    private AudioSource audioSrc;
+    private AudioSource splashAudioSrc;
+    [SerializeField]
+    private AudioSource pushAudioSrc;
 
     private Vector3 targetPos;
     void Start()
@@ -31,6 +33,7 @@ public class CrateMovement : MonoBehaviour
         if (!Physics.Raycast(targetPos + new Vector3(0, .5f, 0f), mvt, tileSize))
         {
             targetPos += Quaternion.Euler(0, cam.transform.rotation.y, 0) * mvt;
+            pushAudioSrc.PlayOneShot(pushAudioSrc.clip);
             if (!Physics.Raycast(targetPos + new Vector3(0f, .5f, 0f), Vector3.down, 1f) && !falling)
             {
                 falling = true;
@@ -53,6 +56,7 @@ public class CrateMovement : MonoBehaviour
 
         Splash.transform.position = targetPos;
         Splash.transform.position = new Vector3(Splash.transform.position.x, -1.5f, Splash.transform.position.z);
+        splashAudioSrc.PlayOneShot(splashAudioSrc.clip);
         Splash.SetActive(true);
 
         yield return new WaitForSeconds(0.9f);
