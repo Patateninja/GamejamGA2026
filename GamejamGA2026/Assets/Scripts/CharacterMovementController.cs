@@ -185,7 +185,7 @@ public class CharacterMovementController : MonoBehaviour
 
         yield return new WaitForSeconds(0.5f);
 
-        targetPos += new Vector3(0f, -5f, 0f);
+        targetPos += new Vector3(0f, -7f, 0f);
         Splash.transform.position = targetPos;
         Splash.transform.position = new Vector3(Splash.transform.position.x, -1.5f, Splash.transform.position.z);
         Splash.SetActive(true);

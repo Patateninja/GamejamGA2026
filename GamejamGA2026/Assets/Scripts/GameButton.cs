@@ -12,6 +12,11 @@ public abstract class GameButton : MonoBehaviour
     [SerializeField]
     protected GameObject OnModel;
 
+    [SerializeField]
+    protected AudioSource pressAudioSrc;
+    [SerializeField]
+    protected AudioSource unpressAudioSrc;
+
     void Start()
     {
         OffModel.SetActive(true);

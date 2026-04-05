@@ -8,11 +8,15 @@ public class HoldButton : GameButton
 
         OffModel.SetActive(false);
         OnModel.SetActive(true);
+
+        pressAudioSrc.PlayOneShot(pressAudioSrc.clip);
     }
 
     public override void Exited()
     {
         active = false;
+
+        unpressAudioSrc.PlayOneShot(unpressAudioSrc.clip);
 
         OffModel.SetActive(true);
         OnModel.SetActive(false);
