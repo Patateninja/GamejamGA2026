@@ -10,6 +10,8 @@ public class CrateMovement : MonoBehaviour
 
     [SerializeField]
     private GameObject Splash;
+    [SerializeField]
+    private AudioSource audioSrc;
 
     private Vector3 targetPos;
     void Start()
