@@ -28,6 +28,8 @@ public class CharacterMovementController : MonoBehaviour
 
     [SerializeField]
     private GameObject Splash;
+    [SerializeField]
+    private AudioSource audioSrc;
 
     void Awake()
     {
@@ -187,6 +189,7 @@ public class CharacterMovementController : MonoBehaviour
         Splash.transform.position = targetPos;
         Splash.transform.position = new Vector3(Splash.transform.position.x, -1.5f, Splash.transform.position.z);
         Splash.SetActive(true);
+        audioSrc.PlayOneShot(audioSrc.clip);
 
         yield return new WaitForSeconds(0.5f);
 
