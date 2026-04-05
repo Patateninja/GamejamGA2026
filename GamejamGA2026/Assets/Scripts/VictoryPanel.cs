@@ -9,6 +9,9 @@ public class VictoryPanel : MonoBehaviour
     [SerializeField]
     private AudioSource audioSrc;
 
+    [SerializeField]
+    private AudioSource victorySrc;
+
     public bool isblocked = false;
     public void BlockVictoryPanel()
     {
@@ -29,6 +32,7 @@ public class VictoryPanel : MonoBehaviour
         {
             return;
         }
+        victorySrc.PlayOneShot(victorySrc.clip);
         Time.timeScale = 0f; // Met le temps à l'arrêt
         (victoryPanel ?? gameObject).SetActive(true); // Affiche le panneau de victory (fallback)
         //appelle la fonction de level completed du level progress manager pour marquer le niveau comme terminé
