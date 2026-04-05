@@ -28,6 +28,9 @@ public class Slot : MonoBehaviour
     [SerializeField]
     private Sprite _spriteFinish;
 
+    [SerializeField]
+    private AudioSource audioSrc;
+
     private string Id => string.IsNullOrEmpty(levelId) ? gameObject.name : levelId;
     private string UnlockedKey => $"Level_unlocked_{levelId}";
     private string CompletedKey => $"Level_completed_{levelId}";
@@ -161,6 +164,7 @@ public class Slot : MonoBehaviour
     // Méthode publique existante pour charger une scène
     public void loadThis(string levelName)
     {
+        audioSrc.PlayOneShot(audioSrc.clip);
         if (isUnlocked)
         {
             if (!string.IsNullOrEmpty(levelName))

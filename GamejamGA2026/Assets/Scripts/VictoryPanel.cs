@@ -6,11 +6,14 @@ public class VictoryPanel : MonoBehaviour
     [SerializeField] private GameObject victoryPanel;
     [SerializeField] private LevelProgressManager levelProgressManager;
 
+    [SerializeField]
+    private AudioSource audioSrc;
+
     public bool isblocked = false;
     public void BlockVictoryPanel()
     {
-        CloseVictoryPanel();
         isblocked = true;
+        CloseVictoryPanel();
     }
 
     private void Awake()
@@ -36,7 +39,17 @@ public class VictoryPanel : MonoBehaviour
     public void CloseVictoryPanel()
     {
         Time.timeScale = 1f; // Reprend le temps
+        if (!isblocked)
+        {
+            audioSrc.PlayOneShot(audioSrc.clip);
+        }
         (victoryPanel ?? gameObject).SetActive(false); // Masque le panneau de victory (fallback)
+    }
+
+    public void ClickRestart()
+    {
+        audioSrc.PlayOneShot(audioSrc.clip);
+        RestartLevel();
     }
 
     public void RestartLevel()
@@ -48,7 +61,8 @@ public class VictoryPanel : MonoBehaviour
     public void QuitGameToMenu()
     {
         Time.timeScale = 1f; // Reprend le temps
-        UnityEngine.SceneManagement.SceneManager.LoadScene("Menu 1");
+        audioSrc.PlayOneShot(audioSrc.clip);
+        UnityEngine.SceneManagement.SceneManager.LoadScene("Menu");
     }
 
     public void NextLevel()
@@ -61,19 +75,20 @@ public class VictoryPanel : MonoBehaviour
             string nextKey = $"Level_unlocked_{nextLevelId}";
             if (PlayerPrefs.GetInt(nextKey, 0) == 1)
             {
+                audioSrc.PlayOneShot(audioSrc.clip);
                 UnityEngine.SceneManagement.SceneManager.LoadScene(nextLevelId);
             }
             else
             {
                 Debug.LogWarning($"Niveau suivant '{nextLevelId}' non débloqué. Vérifiez les PlayerPrefs.");
-                // retourne au menu principal si le niveau suivant n'est pas débloqué (optionnel)
-                UnityEngine.SceneManagement.SceneManager.LoadScene("Menu 1");
+                // retourne au Menu principal si le niveau suivant n'est pas débloqué (optionnel)
+                UnityEngine.SceneManagement.SceneManager.LoadScene("Menu");
             }
         }
         else
         {
             Debug.LogWarning("Aucun ID de niveau suivant spécifié dans LevelProgressManager.");
-            UnityEngine.SceneManagement.SceneManager.LoadScene("Menu 1");
+            UnityEngine.SceneManagement.SceneManager.LoadScene("Menu");
         }
     }
 
