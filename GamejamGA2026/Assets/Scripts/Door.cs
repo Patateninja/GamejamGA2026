@@ -15,9 +15,11 @@ public class Door : MonoBehaviour
 
     private bool open = false;
 
+    private float initY;
+
     void Start()
     {
-        
+        initY = door.transform.position.y;
     }
 
     void Update()
@@ -33,7 +35,7 @@ public class Door : MonoBehaviour
             audioSrc.PlayOneShot(audioSrc.clip);
         }
 
-        door.transform.position = Vector3.Lerp(door.transform.position, new Vector3(door.transform.position.x, open ? -.75f : .5f, door.transform.position.z), Time.deltaTime * 3f);
+        door.transform.position = Vector3.Lerp(door.transform.position, new Vector3(door.transform.position.x, open ? initY -.75f : initY, door.transform.position.z), Time.deltaTime * 3f);
 
     }
 }
