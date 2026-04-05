@@ -11,10 +11,13 @@ public class PausePanel : MonoBehaviour
 
     bool blockPausePanel = false;
 
+    [SerializeField]
+    private AudioSource audioSrc;
+
     public void BlockPausePanel()
     {
-        ClosePausePanel();
         blockPausePanel = true;
+        ClosePausePanel();
     }
 
     // Affiche le panneau de pause et met le temps à l'arrêt
@@ -25,6 +28,7 @@ public class PausePanel : MonoBehaviour
             return;
         }
         Time.timeScale = 0f; // Met le temps à l'arrêt
+        audioSrc.PlayOneShot(audioSrc.clip);
         (pausePanel ?? gameObject).SetActive(true); // Affiche le panneau de pause (fallback)
     }
 
@@ -32,6 +36,10 @@ public class PausePanel : MonoBehaviour
     public void ClosePausePanel()
     {
         Time.timeScale = 1f; // Reprend le temps
+        if (!blockPausePanel)
+        {
+            audioSrc.PlayOneShot(audioSrc.clip);
+        }
         (pausePanel ?? gameObject).SetActive(false); // Masque le panneau de pause (fallback)
     }
 
@@ -91,15 +99,22 @@ public class PausePanel : MonoBehaviour
         }
     }
 
-    public void RestartLevel()
+    public void ClicRestart()
     {
+        audioSrc.PlayOneShot(audioSrc.clip);
+        RestartLevel();
+    }
+
+    public void RestartLevel()
+    {   
         Time.timeScale = 1f; // Reprend le temps
         UnityEngine.SceneManagement.SceneManager.LoadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex);
     }
     public void QuitGameToMenu()
     {
+        audioSrc.PlayOneShot(audioSrc.clip);
         Time.timeScale = 1f; // Reprend le temps
-        UnityEngine.SceneManagement.SceneManager.LoadScene("Menu 1");
+        UnityEngine.SceneManagement.SceneManager.LoadScene("Menu");
     }
 
     void Update()
