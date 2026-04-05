@@ -96,6 +96,12 @@ public class CharacterMovementController : MonoBehaviour
 
     private void Movement()
     {
+        if (Canvas.GetComponent<VictoryPanel>().isblocked)
+        {
+            playerSprite.GetComponent<Animator>().SetFloat("Magnitude", 0f);
+            return;
+        }
+
         Vector2 input = moveAction.ReadValue<Vector2>();
         Vector3 mvt = new Vector3(input.y == 0 ? input.x : 0f, 0f, input.y);
 
@@ -139,14 +145,14 @@ public class CharacterMovementController : MonoBehaviour
         {
             if (hit.collider.gameObject.CompareTag("LightCrate"))
             {
-                if (hit.collider.gameObject.GetComponent<CrateMovement>().MoveThisDirection(input))
+                if (hit.collider.gameObject.GetComponent<CrateMovement>().MoveThisDirection(input, cam))
                 {
                     targetPos += Quaternion.Euler(0, cam.transform.rotation.y, 0) * mvt;
                 }
             }
             else if (hit.collider.gameObject.CompareTag("Crate"))
             {
-                hit.collider.gameObject.GetComponent<CrateMovement>().MoveThisDirection(input);
+                hit.collider.gameObject.GetComponent<CrateMovement>().MoveThisDirection(input, cam);
             }
         }
 
@@ -164,10 +170,12 @@ public class CharacterMovementController : MonoBehaviour
 
     private IEnumerator Fall()
     {
+        yield return new WaitForSeconds(0.1f);
+
         Canvas.GetComponent<VictoryPanel>().BlockVictoryPanel();
         Canvas.GetComponent<PausePanel>().BlockPausePanel();
 
-        yield return new WaitForSeconds(0.6f);
+        yield return new WaitForSeconds(0.5f);
 
         playerSprite.GetComponent<Animator>().SetBool("falling", falling);
 
